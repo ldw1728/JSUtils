@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./modal.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+    </head>
+    <style>
+        html, body{
+            width:100%;
+            height:100%;
+        }
+        body{margin:0px}
+      
+
+    </style>
+    <body >
+    <button id="btn" type="button">btn</button>
+    
+    <script>
+    
+    document.querySelector('#btn').addEventListener('click', modalEvent);
+
+    async function modalEvent(){
+
+        var options = {
+            title: "wweqweweqwew",
+            type: ['input', 'text'],
+            contentsStr: ['이름','나이','성별'],
+        }
+
+        var res = await createModal(options);
+        
+        if(res.status){
+            //true logic
+        }else{
+            //false logic
+        }
+        document.body.append(JSON.stringify(res)+' ');
+    }
+    </script>
+    <script src="./asyncModal.js"></script>
+    </body>
+</html>

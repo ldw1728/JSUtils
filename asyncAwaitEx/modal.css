@@ -1,0 +1,48 @@
+.modalContainer {
+    font-family: "Poppins", sans-serif;
+    padding: 1.5rem 1rem;
+    text-align:center;
+    width:20rem;
+    height:fit-content;
+    background-color:white;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.2), 4px 4px 8px rgba(0,0,0,0.2); 
+}
+#modalContents{
+    padding: 1rem 1rem;
+    width: auto;
+    height: 100%;
+    
+}
+#modalContents > table{
+    display: flex;
+    justify-content: center;
+      
+  }
+
+.message{
+    display:block; 
+    padding:1rem 1rem;
+}
+
+.modalContainer > button {
+    padding: 0.5rem 1rem;
+    margin:1.5rem;
+    background: none;
+    border: none;
+    box-shadow: 2px 3px 3px rgba(0,0,0,0), 2px 3px 3px rgba(0,0,0,0.2);
+    border-radius: 20px;
+    font-weight: bold;
+    color: #585858;
+}
+
+.modalContainer > button:hover{
+    background: lightgray;
+}
+.modalContainer > input{
+    
+}
+
