@@ -10,24 +10,21 @@
     left:50%;
     transform:translate(-50%, -50%);
     box-shadow: 4px 4px 8px rgba(0,0,0,0.2), 4px 4px 8px rgba(0,0,0,0.2); 
+    border-radius: 20px;
 }
 #modalContents{
     padding: 1rem 1rem;
     width: auto;
     height: 100%;
-    
 }
 #modalContents > table{
     display: flex;
     justify-content: center;
-      
   }
-
 .message{
     display:block; 
     padding:1rem 1rem;
 }
-
 .modalContainer > button {
     padding: 0.5rem 1rem;
     margin:1.5rem;
