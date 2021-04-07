@@ -12,7 +12,7 @@ function formatStringRegExp(value, format, event){
     var valTotalLen = 0;
     var captureFormat = format;
     
-    var value = stringValidCheck(event, formatValArray, format, value).value;
+    var value = stringValidCheck(event, formatValArray, format, value);
 
      //구분자를 뺀 숫자
      var resultValue = value.replace(/[^a-zA-Z0-9]/gi,'');
@@ -26,6 +26,7 @@ function formatStringRegExp(value, format, event){
 
         captureFormat = captureFormat.replace(formatValArray[i], captureNum); //1$ - 2$ ..... 형식으로 변형
         valTotalLen += valLen; //format기준으로 value 최대길이
+        
         formatValArray[i] = '(\\w{0,'+ String(valLen) +'})'; //정규식 생성.
 
         if(valTotalLen > resultValue.length){
@@ -65,63 +66,27 @@ function formatStringRegExp(value, format, event){
 
 function stringValidCheck(event, formatValArray, format, value){
 
-    var result = {
-        value : value,
-        status : false
-    };
-
     var position = event.target.selectionStart;
-    var foramtVal;
     var inputValue = event.originalEvent.data;
     var index = 0;
-    console.log(position);
+    
     for(let i = 0 ; i < formatValArray.length ; i++){
         index = format.indexOf("}", index+1);
-        if(position < index){
-            foramtVal = format.replace(/\{|\}/g, '');
-            let e = foramtVal.charAt(position-1);
-            console.log(foramtVal);
-            switch(e){
-                case '0' : {
-                    if(isNaN(inputValue)){
-                        result.value = value.replaceAt(position-1, '');                    
-                    }
-                    else result.status = true;
-                    break;
-                }
-                case 's' : {
-                        if(isNaN(inputValue)){
-                        result.value = value.replaceAt(position-1, inputValue.toLowerCase());
-                        result.status = true;
-                    } else {
-                        result.value = value.replaceAt(position-1, '');
-                        result.status = false;
-                    }
-                    break;
-                }
-                case 'S' : {
-                    if(isNaN(inputValue)){
-                        result.value = value.replaceAt(position-1, inputValue.toUpperCase());
-                        result.status = true;
-                    } else {
-                        result.value = value.replaceAt(position-1, '');
-                        result.status = false;
-                    }
-                    break;
-                }
-                    
+        
+        if(position <= index - ((i+1)*2)+1){ //찾은 } 문자의 인덱스기준에서 앞에있는 모든 {}의 개수를 빼어 position과 같은 기준으로 맞춤. 
+            //position은 inputText에있는 문자열기준의 현재위치이고 index는 format문자열기준의 위치.
+            if((formatValArray[i].indexOf('0') > -1 && isNaN(inputValue)) || //숫자, 문자 구별
+                    (formatValArray[i].indexOf('s') > -1 && !isNaN(inputValue))){                       
+                return value.replaceAt(position-1, '');
             }
-                      
+            else return value;          
         }
-        return result;  
-    }   
+    }
+    return value;
 }
-
 String.prototype.replaceAt = function(index, char){
     var index2 = !char ? 1 : char.length;
     return this.substring(0, index) + char + this.substring(index+index2);
-    
-
 }
 
 $('#formatTextInput').on('input', (event)=>{
