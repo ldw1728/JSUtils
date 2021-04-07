@@ -1,17 +1,21 @@
 
 function formatStringRegExp(value, format, event){
-
+    
     //backSpace입력시 value값 return;
     if(event.originalEvent.inputType === "deleteContentBackward"){
         return value;
     }
 
-    //구분자를 뺀 숫자
-    var resultValue = value.replace(/[^a-zA-Z0-9]/gi,'');
+   
     //{...}들 
     var formatValArray = format.split(/[^\{\w+\}]/).filter(e=>e);
     var valTotalLen = 0;
     var captureFormat = format;
+    
+    var value = stringValidCheck(event, formatValArray, format, value).value;
+
+     //구분자를 뺀 숫자
+     var resultValue = value.replace(/[^a-zA-Z0-9]/gi,'');
 
     console.log(formatValArray);
 
@@ -57,6 +61,67 @@ function formatStringRegExp(value, format, event){
         }       
         event.target.setSelectionRange(position,position);
     }
+}
+
+function stringValidCheck(event, formatValArray, format, value){
+
+    var result = {
+        value : value,
+        status : false
+    };
+
+    var position = event.target.selectionStart;
+    var foramtVal;
+    var inputValue = event.originalEvent.data;
+    var index = 0;
+    console.log(position);
+    for(let i = 0 ; i < formatValArray.length ; i++){
+        index = format.indexOf("}", index+1);
+        if(position < index){
+            foramtVal = format.replace(/\{|\}/g, '');
+            let e = foramtVal.charAt(position-1);
+            console.log(foramtVal);
+            switch(e){
+                case '0' : {
+                    if(isNaN(inputValue)){
+                        result.value = value.replaceAt(position-1, '');                    
+                    }
+                    else result.status = true;
+                    break;
+                }
+                case 's' : {
+                        if(isNaN(inputValue)){
+                        result.value = value.replaceAt(position-1, inputValue.toLowerCase());
+                        result.status = true;
+                    } else {
+                        result.value = value.replaceAt(position-1, '');
+                        result.status = false;
+                    }
+                    break;
+                }
+                case 'S' : {
+                    if(isNaN(inputValue)){
+                        result.value = value.replaceAt(position-1, inputValue.toUpperCase());
+                        result.status = true;
+                    } else {
+                        result.value = value.replaceAt(position-1, '');
+                        result.status = false;
+                    }
+                    break;
+                }
+                    
+            }
+                      
+        }
+        return result;  
+    }   
+}
+
+String.prototype.replaceAt = function(index, char){
+    var index2 = !char ? 1 : char.length;
+    return this.substring(0, index) + char + this.substring(index+index2);
+    
+
 }
 
 $('#formatTextInput').on('input', (event)=>{
